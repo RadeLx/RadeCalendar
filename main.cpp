@@ -6,6 +6,7 @@
 using namespace std;
 
 int main() {
+
     const string userName = "nxrad";
     const int default_year = 2023, default_month = 6, default_second = 0;
 
@@ -21,7 +22,7 @@ int main() {
         string summary, description, location;
         cout << "When is the event start?" << endl;
         cin >> hour >> minute;
-        if(hour + minute == 0) {
+        if (hour + minute == 0) {
             calendar.removeEvent(1);
             break;
         }
@@ -53,5 +54,5 @@ int main() {
     }
     calendar.printFooter(output);
     string temp = output.str();
-    ansi2unicode::saveAsUTF8((string)"calendar.ics", temp, userName);
+    ansi2unicode::saveAsUTF8((string) "calendar.ics", temp, userName);
 }

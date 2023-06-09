@@ -1,7 +1,4 @@
-#pragma clang diagnostic push
-
 #include <utility>
-
 #include "../inc/calendar.h"
 #include "iostream"
 #include "iomanip"
@@ -20,7 +17,7 @@ size_t Calendar::getEventSize() {
     return events.size();
 }
 
-Event& Calendar::getEvent(int index) {
+Event &Calendar::getEvent(int index) {
     return events[index];
 }
 
@@ -41,7 +38,7 @@ size_t Calendar::removeEvent(int num) {
 
 void Event::printEvent(ostream &os) {
     os << "BEGIN:VEVENT" << endl;
-    if(uid == "null")
+    if (uid == "null")
         generateUID();
     os << "UID:" << uid << endl;
     os << "DTSTART:" << getDTStart() << endl;
@@ -68,21 +65,23 @@ void Event::generateUID() {
     mt19937 rng = mt19937(random_device()());
     uniform_int_distribution<int> dist(0, 99999999);
     string s = to_string(dist(rng));
-    s.insert(s.begin(),  8 - s.length(), '0');
+    s.insert(s.begin(), 8 - s.length(), '0');
     uid += '-' + s;
 }
 
 string Event::getDTStart() {
     stringstream ss;
     array<int, 6> time = dateTimeStart.getTime();
-    ss << setfill('0') << setw(4) << time[0] << setw(2) << time[1] << setw(2) << time[2] << "T" << setw(2) << time[3] << setw(2) << time[4] << setw(2) << time[5];
+    ss << setfill('0') << setw(4) << time[0] << setw(2) << time[1] << setw(2) << time[2] << "T" << setw(2) << time[3]
+       << setw(2) << time[4] << setw(2) << time[5];
     return ss.str();
 }
 
 string Event::getDTEnd() {
     stringstream ss;
     array<int, 6> time = dateTimeEnd.getTime();
-    ss << setfill('0') << setw(4) << time[0] << setw(2) << time[1] << setw(2) << time[2] << "T" << setw(2) << time[3] << setw(2) << time[4] << setw(2) << time[5];
+    ss << setfill('0') << setw(4) << time[0] << setw(2) << time[1] << setw(2) << time[2] << "T" << setw(2) << time[3]
+       << setw(2) << time[4] << setw(2) << time[5];
     return ss.str();
 }
 
@@ -95,8 +94,8 @@ string Event::getSummary() const {
 }
 
 void Event::setDescription(string description_input) {
-    if(!description_input.empty())
-    description = std::move(description_input);
+    if (!description_input.empty())
+        description = std::move(description_input);
 }
 
 string Event::getDescription() const {
@@ -104,8 +103,8 @@ string Event::getDescription() const {
 }
 
 void Event::setLocation(string location_input) {
-    if(!location_input.empty())
-    location = std::move(location_input);
+    if (!location_input.empty())
+        location = std::move(location_input);
 }
 
 string Event::getLocation() const {
@@ -117,7 +116,8 @@ void Event::setDTEnd(Time duration) {
 }
 
 void Time::printTime() const {
-    cout << setfill('0') << setw(4) << year << setw(2) << month << setw(2) << day << "T" << setw(2) << hour << setw(2) << minute << setw(2) << second << "Z" << endl;
+    cout << setfill('0') << setw(4) << year << setw(2) << month << setw(2) << day << "T" << setw(2) << hour << setw(2)
+         << minute << setw(2) << second << "Z" << endl;
 }
 
 array<int, 6> Time::getTime() const {

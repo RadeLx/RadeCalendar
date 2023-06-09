@@ -13,14 +13,14 @@ std::wstring ansi2unicode::ANSI2Unicode(const std::string &str) {
     int unicode_len = MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, nullptr, 0);
     auto *unicode_p = new wchar_t[unicode_len + 1];
     memset(unicode_p, 0, (unicode_len) * sizeof(wchar_t));
-    MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, (LPWSTR)unicode_p, unicode_len);
+    MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, (LPWSTR) unicode_p, unicode_len);
     std::wstring str_w;
-    str_w = (wchar_t *)unicode_p;
+    str_w = (wchar_t *) unicode_p;
     delete[] unicode_p;
     return str_w;
 }
 
-void ansi2unicode::saveAsUTF8(const std::string& file_name, const std::string& content, const std::string& userName) {
+void ansi2unicode::saveAsUTF8(const std::string &file_name, const std::string &content, const std::string &userName) {
     std::wstring content_unicode = ANSI2Unicode(content);
     std::string userDesktop = "C:\\Users\\" + userName + "\\Desktop\\";
     std::wofstream ofs(userDesktop + file_name, std::ios::ate);
