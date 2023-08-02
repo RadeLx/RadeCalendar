@@ -41,8 +41,13 @@ void Event::printEvent(ostream &os) {
     if (uid == "null")
         generateUID();
     os << "UID:" << uid << endl;
-    os << "DTSTART:" << getDTStart() << endl;
-    os << "DTEND:" << getDTEnd() << endl;
+    if(allDay){
+        os << "DTSTART;VALUE=DATE:" << getDTStart(allDay) << endl;
+        os << "DTEND;VALUE=DATE:" << getDTEnd(allDay) << endl;
+    }else{
+        os << "DTSTART:" << getDTStart() << endl;
+        os << "DTEND:" << getDTEnd() << endl;
+    }
     os << "SUMMARY:" << summary << endl;
     os << "DESCRIPTION:" << description << endl;
     os << "LOCATION:" << location << endl;
@@ -53,6 +58,11 @@ void Event::printEvent(ostream &os) {
 
 void Event::setDTStart(int year, int month, int day, int hour, int minute, int second) {
     dateTimeStart = Time(year, month, day, hour, minute, second);
+}
+
+void Event::setDTStart(int year, int month, int day) {
+    dateTimeStart = Time(year, month, day);
+    allDay = true;
 }
 
 void Event::setDTEnd(int year, int month, int day, int hour, int minute, int second) {
@@ -69,19 +79,25 @@ void Event::generateUID() {
     uid += '-' + s;
 }
 
-string Event::getDTStart() {
+string Event::getDTStart(bool allDay) {
     stringstream ss;
     array<int, 6> time = dateTimeStart.getTime();
-    ss << setfill('0') << setw(4) << time[0] << setw(2) << time[1] << setw(2) << time[2] << "T" << setw(2) << time[3]
-       << setw(2) << time[4] << setw(2) << time[5];
+    if(allDay)
+        ss << setfill('0') << setw(4) << time[0] << setw(2) << time[1] << setw(2) << time[2];
+    else
+        ss << setfill('0') << setw(4) << time[0] << setw(2) << time[1] << setw(2) << time[2] << "T" << setw(2) << time[3]
+           << setw(2) << time[4] << setw(2) << time[5];
     return ss.str();
 }
 
-string Event::getDTEnd() {
+string Event::getDTEnd(bool allDay) {
     stringstream ss;
     array<int, 6> time = dateTimeEnd.getTime();
-    ss << setfill('0') << setw(4) << time[0] << setw(2) << time[1] << setw(2) << time[2] << "T" << setw(2) << time[3]
-       << setw(2) << time[4] << setw(2) << time[5];
+    if(allDay)
+        ss << setfill('0') << setw(4) << time[0] << setw(2) << time[1] << setw(2) << time[2];
+    else
+        ss << setfill('0') << setw(4) << time[0] << setw(2) << time[1] << setw(2) << time[2] << "T" << setw(2) << time[3]
+           << setw(2) << time[4] << setw(2) << time[5];
     return ss.str();
 }
 
@@ -113,6 +129,14 @@ string Event::getLocation() const {
 
 void Event::setDTEnd(Time duration) {
     dateTimeEnd = dateTimeStart + duration;
+}
+
+void Event::setAllDay(bool option) {
+     allDay = option;
+}
+
+bool Event::getAllday() {
+    return allDay;
 }
 
 void Time::printTime() const {

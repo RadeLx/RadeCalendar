@@ -15,6 +15,8 @@ public:
                                                                            hour(hour), minute(minute),
                                                                            second(second) {};
 
+    Time(int year, int month, int day) : year(year), month(month), day(day) {};
+
     Time() = default;
 
     void printTime() const;
@@ -28,12 +30,11 @@ public:
 
 class Event {
 private:
+    bool allDay = false;
     Time dateTimeStart;
     Time dateTimeEnd;
     string uid = "null";
-    string summary = "null";
-    string description = "null";
-    string location = "null";
+    string summary, description, location;
 public:
     Event() = default;
 
@@ -41,15 +42,21 @@ public:
 
     void printEvent(ostream &os);
 
+    void setAllDay(bool option);
+
+    bool getAllday();
+
     void setDTStart(int year, int month, int day, int hour, int minute, int second);
 
-    string getDTStart();
+    void setDTStart(int year, int month, int day);
+
+    string getDTStart(bool allDay = false);
 
     void setDTEnd(int year, int month, int day, int hour, int minute, int second);
 
     void setDTEnd(Time duration);
 
-    string getDTEnd();
+    string getDTEnd(bool allDay = false);
 
     void setSummary(string summary_input);
 

@@ -8,34 +8,47 @@ using namespace std;
 int main() {
 
     const string userName = "nxrad";
-    const int default_year = 2023, default_month = 6, default_second = 0;
+    const int default_year = 2023, default_month = 7, default_second = 0;
 
     stringstream output;
-    int day;
+    int month, day;
     Calendar calendar;
     calendar.printHeader(output);
-    cout << "What date is today?" << endl;
-    cin >> day;
     int hour = 0, minute = 1;
     for (int i = 0; true; i++) {
         calendar.addEvent(1);
-        string summary, description, location;
-        cout << "When is the event start?" << endl;
-        cin >> hour >> minute;
-        if (hour + minute == 0) {
+        cout << "Enter date (m d)" << endl;
+        cin >> month >> day;
+        if (month + day == 0) {
             calendar.removeEvent(1);
             break;
         }
-        calendar.getEvent(i).setDTStart(default_year, default_month, day, hour, minute, default_second);
+        string dtStart, summary, description, location;
+        cout << "When does the event start?" << endl;
 
-        cout << "How long is the event?" << endl;
-        cin >> minute;
-        if (minute)
-            calendar.getEvent(i).setDTEnd(Time(0, 0, 0, 0, minute, 0));
-        else {
-            cout << "When is the event end?" << endl;
-            cin >> hour >> minute;
-            calendar.getEvent(i).setDTEnd(default_year, default_month, day, hour, minute, default_second);
+        cin.ignore(99, '\n');
+        getline(cin, dtStart);
+        if(dtStart.empty()){
+            //All day event
+            calendar.getEvent(i).setAllDay(true);
+            calendar.getEvent(i).setDTStart(default_year, month, day);
+            cout << "How many days is the event?" << endl;
+            int days;
+            cin >> days;
+            calendar.getEvent(i).setDTEnd(Time(0, 0, days));
+        }else{
+            stringstream ss(dtStart);
+            ss >> hour >> minute;
+            calendar.getEvent(i).setDTStart(default_year, month, day, hour, minute, default_second);
+            cout << "How long is the event?" << endl;
+            cin >> minute;
+            if (minute)
+                calendar.getEvent(i).setDTEnd(Time(0, 0, 0, 0, minute, 0));
+            else {
+                cout << "When does the event end?" << endl;
+                cin >> hour >> minute;
+                calendar.getEvent(i).setDTEnd(default_year, month, day, hour, minute, default_second);
+            }
         }
         cout << "What is the event summary?" << endl;
         cin.ignore(99, '\n');
